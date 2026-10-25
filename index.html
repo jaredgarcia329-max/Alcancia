@@ -440,15 +440,21 @@
         let currentActionType = 'deposit';
         let showBalance = true;
 
-        // Sincronización en tiempo real con Firestore
-        onSnapshot(docRef, (docSnap) => {
+        // Sincronización en tiempo real con Firestore sin sobrescribir datos existentes
+        onSnapshot(docRef, async (docSnap) => {
             if (docSnap.exists()) {
-                appData = docSnap.data();
-                if (!appData.adminCode) appData.adminCode = "1208";
-                if (!appData.phone) appData.phone = "94945253";
-                if (!appData.pass) appData.pass = "1208";
+                const cloudData = docSnap.data();
+                // Combinar datos de la nube respetando lo que ya está guardado
+                appData.phone = cloudData.phone || "94945253";
+                appData.pass = cloudData.pass || "1208";
+                appData.balance = typeof cloudData.balance === 'number' ? cloudData.balance : 0.00;
+                appData.goalTitle = cloudData.goalTitle || "Mi Meta de Ahorro";
+                appData.goalTarget = typeof cloudData.goalTarget === 'number' ? cloudData.goalTarget : 500.00;
+                appData.adminCode = cloudData.adminCode || "1208";
+                appData.history = cloudData.history || [];
             } else {
-                setDoc(docRef, appData);
+                // Si la base de datos está completamente vacía, crear el documento inicial
+                await setDoc(docRef, appData);
             }
             
             if (currentSession) {
