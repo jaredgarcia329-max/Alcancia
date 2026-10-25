@@ -41,7 +41,6 @@
             color: #f3f4f6;
             -webkit-tap-highlight-color: transparent;
         }
-        /* Realistic Card Styling */
         .credit-card {
             background: linear-gradient(135deg, #0b2b30 0%, #005c50 50%, #002229 100%);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 2px rgba(255, 255, 255, 0.3);
@@ -74,7 +73,6 @@
             border-top: 1px solid rgba(0,0,0,0.2);
             border-bottom: 1px solid rgba(0,0,0,0.2);
         }
-        /* Smooth Animations */
         .fade-in {
             animation: fadeIn 0.3s ease-in-out forwards;
         }
@@ -82,13 +80,11 @@
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* Glassmorphism Elements */
         .glass-card {
             background: rgba(18, 38, 48, 0.75);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -150,14 +146,14 @@
                                 <label class="block text-xs font-medium text-gray-300 mb-1.5">Número de Teléfono</label>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400"><i class="fa-solid fa-phone"></i></span>
-                                    <input type="tel" id="loginPhone" required placeholder="94945253" class="w-full bg-[#071319] border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-teal-500 transition-colors">
+                                    <input type="tel" id="loginPhone" required value="94945253" class="w-full bg-[#071319] border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-teal-500 transition-colors">
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-300 mb-1.5">Contraseña de Acceso</label>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400"><i class="fa-solid fa-lock"></i></span>
-                                    <input type="password" id="loginPass" required placeholder="1208" class="w-full bg-[#071319] border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-teal-500 transition-colors">
+                                    <input type="password" id="loginPass" required value="1208" class="w-full bg-[#071319] border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-teal-500 transition-colors">
                                 </div>
                             </div>
                             <button type="submit" class="w-full bg-gradient-to-r from-teal-600 to-emerald-500 text-white font-semibold py-3 rounded-xl shadow-lg hover:from-teal-500 hover:to-emerald-400 transition-all mt-2 text-sm">
@@ -213,7 +209,6 @@
 
                     <!-- REALISTIC CARD COMPONENT -->
                     <div class="credit-card rounded-2xl p-5 text-white shadow-xl relative mb-5">
-                        <!-- Card Top Bar: Logos -->
                         <div class="flex justify-between items-start mb-4">
                             <div>
                                 <p class="text-[10px] uppercase tracking-widest text-teal-200/70 font-semibold">Tarjeta de Débito</p>
@@ -221,25 +216,21 @@
                                     Banco de Occidente S.A.
                                 </p>
                             </div>
-                            <!-- Small School Bank Logo on top right -->
                             <div class="bg-white/10 backdrop-md px-2.5 py-1 rounded-lg border border-white/15 flex items-center gap-1.5 shadow-sm">
                                 <i class="fa-solid fa-building-columns text-teal-300 text-xs"></i>
                                 <span class="text-[10px] font-extrabold tracking-wider text-white uppercase">Banco Escolar</span>
                             </div>
                         </div>
 
-                        <!-- EMV Chip & Contactless -->
                         <div class="flex items-center justify-between mb-4">
                             <div class="card-chip w-11 h-8"></div>
                             <i class="fa-solid fa-wifi text-teal-300/80 text-lg rotate-90"></i>
                         </div>
 
-                        <!-- Card Number Masked -->
                         <div class="mb-4">
                             <p class="font-mono text-lg tracking-widest text-teal-50 drop-shadow">5234 4578 9012 3456</p>
                         </div>
 
-                        <!-- Card Holder & Expiry -->
                         <div class="flex justify-between items-end">
                             <div>
                                 <p class="text-[9px] uppercase tracking-wider text-teal-200/60">Titular</p>
@@ -330,9 +321,7 @@
                 </h3>
                 <button onclick="closeHistoryModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
-            <div id="transactionList" class="flex-1 overflow-y-auto space-y-2 pr-1 text-xs">
-                <!-- Transactions injected dynamically -->
-            </div>
+            <div id="transactionList" class="flex-1 overflow-y-auto space-y-2 pr-1 text-xs"></div>
         </div>
     </div>
 
@@ -388,7 +377,6 @@
                     <input type="password" id="currentAdminCode" required placeholder="Ingresa PIN maestro" class="w-full bg-[#071319] border border-amber-600/50 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
                 </div>
 
-                <!-- RESETEAR HISTORIAL DESDE EL PANEL ADMIN -->
                 <div class="pt-2 border-t border-gray-800 flex items-center justify-between">
                     <div>
                         <span class="text-[11px] text-gray-300 font-medium">Borrar historial de transacciones</span>
@@ -439,14 +427,20 @@
         let currentSession = null;
         let currentActionType = 'deposit';
         let showBalance = true;
+        let isInitialLoad = true;
 
-        // Sincronización en tiempo real con Firestore sin sobrescribir datos existentes
+        // Sincronización robusta con Firestore para proteger el saldo
         onSnapshot(docRef, async (docSnap) => {
             if (docSnap.exists()) {
                 const cloudData = docSnap.data();
                 appData.phone = cloudData.phone || "94945253";
                 appData.pass = cloudData.pass || "1208";
-                appData.balance = typeof cloudData.balance === 'number' ? cloudData.balance : 0.00;
+                
+                // Solo tomamos el saldo de la nube si existe, de lo contrario mantenemos el local para evitar reinicios a 0
+                if (typeof cloudData.balance === 'number') {
+                    appData.balance = cloudData.balance;
+                }
+                
                 appData.goalTitle = cloudData.goalTitle || "Mi Meta de Ahorro";
                 appData.goalTarget = typeof cloudData.goalTarget === 'number' ? cloudData.goalTarget : 500.00;
                 appData.adminCode = cloudData.adminCode || "1208";
@@ -455,6 +449,10 @@
                 await setDoc(docRef, appData);
             }
             
+            if (isInitialLoad) {
+                isInitialLoad = false;
+            }
+
             if (currentSession) {
                 updateDashboardUI();
                 if (!document.getElementById('historyModal').classList.contains('hidden')) {
@@ -548,7 +546,7 @@
             
             document.getElementById('regOldPass').value = '';
             document.getElementById('regPass').value = '';
-            alert('¡Configuración actualizada en la nube con éxito!');
+            alert('¡Usuario y contraseña cambiados con éxito!');
             switchAuthTab('login');
         }
 
@@ -738,7 +736,6 @@
             }
         }
 
-        // Exponer funciones globales
         window.switchAuthTab = switchAuthTab;
         window.handleLogin = handleLogin;
         window.handleRegister = handleRegister;
