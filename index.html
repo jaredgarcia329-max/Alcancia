@@ -461,9 +461,9 @@
             checkSession();
         });
 
-        async function saveToCloud() {
-            try {
-                await setDoc(docRef, appData);
+        async function saveToCloud() 
+        {
+            await setDoc(docRef, appData, { merge: true });
             } catch (e) {
                 console.error("Error al guardar en la nube: ", e);
                 alert("Error de sincronización con la nube.");
