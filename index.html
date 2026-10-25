@@ -109,8 +109,8 @@
         <!-- HEADER STATUS BAR DECORATION -->
         <div class="bg-[#0b181f] px-6 py-2 flex justify-between items-center text-xs text-gray-400 border-b border-gray-800/50">
             <div class="flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-teal-400"></i>
-                <span class="font-medium text-gray-300">Banco Escolar Conectado</span>
+                <i class="fa-solid fa-cloud text-teal-400"></i>
+                <span class="font-medium text-gray-300">Firebase Cloud Sincronizado</span>
             </div>
             <div class="flex items-center gap-1.5 text-gray-400">
                 <i class="fa-solid fa-battery-three-quarters"></i>
@@ -132,7 +132,7 @@
                             <i class="fa-solid fa-building-columns text-3xl"></i>
                         </div>
                         <h1 class="text-2xl font-bold text-white tracking-wide">Banco Escolar</h1>
-                        <p class="text-xs text-teal-400 font-medium tracking-wider mt-0.5">Alcancía Digital de Josué</p>
+                        <p class="text-xs text-teal-400 font-medium tracking-wider mt-0.5">Alcancía Digital en la Nube</p>
                     </div>
 
                     <!-- Auth Form Container -->
@@ -168,7 +168,7 @@
                         <!-- Config / Register Form -->
                         <form id="configForm" onsubmit="handleRegister(event)" class="space-y-3.5 hidden">
                             <p class="text-[11px] text-teal-300/80 bg-teal-950/40 p-2.5 rounded-lg border border-teal-800/30">
-                                <i class="fa-solid fa-circle-info mr-1"></i> Configura los datos de acceso. <strong>Se requiere la contraseña actual</strong> para aplicar cambios.
+                                <i class="fa-solid fa-circle-info mr-1"></i> Configura los datos de acceso en la nube. <strong>Se requiere la contraseña actual</strong>.
                             </p>
                             <div>
                                 <label class="block text-xs font-medium text-gray-300 mb-1">Nuevo Número de Teléfono</label>
@@ -183,7 +183,7 @@
                                 <input type="password" id="regPass" required placeholder="Nueva contraseña" class="w-full bg-[#071319] border border-gray-750 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-teal-500">
                             </div>
                             <button type="submit" class="w-full bg-teal-700 text-white font-semibold py-2.5 rounded-xl hover:bg-teal-600 transition-all text-sm mt-1">
-                                Guardar Configuración
+                                Guardar en la Nube
                             </button>
                         </form>
 
@@ -191,7 +191,7 @@
                 </div>
                 
                 <div class="text-center text-[11px] text-gray-500 mt-6">
-                    Banco Escolar Digital &bull; Sistema Seguro NFC
+                    Banco Escolar Digital &bull; Firebase Firestore
                 </div>
             </div>
 
@@ -250,7 +250,6 @@
                                 <p class="text-xs font-mono font-semibold">12/28</p>
                             </div>
                             <div class="flex items-center">
-                                <!-- Visa Logo representation -->
                                 <span class="font-black italic text-sm tracking-tighter text-teal-200">VISA</span>
                             </div>
                         </div>
@@ -259,14 +258,14 @@
                     <!-- BALANCE CARD WITH HIDE OPTION -->
                     <div class="glass-card rounded-2xl p-4 mb-4 shadow-lg relative overflow-hidden">
                         <div class="flex justify-between items-center mb-1">
-                            <span class="text-xs text-gray-400 font-medium">SALDO DISPONIBLE</span>
+                            <span class="text-xs text-gray-400 font-medium">SALDO DISPONIBLE (NUBE)</span>
                             <button onclick="toggleBalanceVisibility()" class="text-gray-400 hover:text-white text-xs">
                                 <i id="eyeIcon" class="fa-solid fa-eye"></i>
                             </button>
                         </div>
                         <div class="flex items-baseline justify-between">
                             <h2 id="balanceDisplay" class="text-3xl font-extrabold text-white font-mono tracking-tight">$0.00</h2>
-                            <span class="text-[10px] bg-teal-950 text-teal-300 px-2 py-0.5 rounded-md border border-teal-800/40">Lempiras / USD</span>
+                            <span class="text-[10px] bg-teal-950 text-teal-300 px-2 py-0.5 rounded-md border border-teal-800/40">Sincronizado</span>
                         </div>
                     </div>
 
@@ -327,7 +326,7 @@
         <div class="bg-[#10242e] border border-gray-800 rounded-2xl w-full max-w-md p-5 shadow-2xl max-h-[80vh] flex flex-col">
             <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-800">
                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-list-ul text-teal-400"></i> Historial de Movimientos
+                    <i class="fa-solid fa-list-ul text-teal-400"></i> Historial en la Nube
                 </h3>
                 <button onclick="closeHistoryModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
@@ -389,11 +388,11 @@
                     <input type="password" id="currentAdminCode" required placeholder="Ingresa PIN maestro" class="w-full bg-[#071319] border border-amber-600/50 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
                 </div>
 
-                <!-- NUEVA OPCIÓN: RESETEAR HISTORIAL DESDE EL PANEL ADMIN -->
+                <!-- RESETEAR HISTORIAL DESDE EL PANEL ADMIN -->
                 <div class="pt-2 border-t border-gray-800 flex items-center justify-between">
                     <div>
                         <span class="text-[11px] text-gray-300 font-medium">Borrar historial de transacciones</span>
-                        <p class="text-[9px] text-gray-500">Elimina los registros guardados</p>
+                        <p class="text-[9px] text-gray-500">Elimina los registros en la nube</p>
                     </div>
                     <button type="button" onclick="clearHistoryFromAdmin()" class="bg-red-950/60 border border-red-800/60 text-red-300 px-3 py-1.5 rounded-lg text-[10px] font-semibold hover:bg-red-900/60">
                         Resetear
@@ -402,14 +401,31 @@
 
                 <div class="flex gap-2 pt-2">
                     <button type="button" onclick="closeAdminModal()" class="flex-1 bg-gray-800 text-gray-300 py-2 rounded-xl text-xs hover:bg-gray-700">Cancelar</button>
-                    <button type="submit" class="flex-1 bg-teal-600 text-white py-2 rounded-xl text-xs hover:bg-teal-500 font-medium shadow">Actualizar</button>
+                    <button type="submit" class="flex-1 bg-teal-600 text-white py-2 rounded-xl text-xs hover:bg-teal-500 font-medium shadow">Actualizar Nube</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
+    <!-- FIREBASE & APP JAVASCRIPT LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFiSD7ZeY9fZPANxD0rumcoBJPF-P3GeY",
+            authDomain: "banco-escolar-cea1e.firebaseapp.com",
+            projectId: "banco-escolar-cea1e",
+            storageBucket: "banco-escolar-cea1e.firebasestorage.app",
+            messagingSenderId: "1013987226718",
+            appId: "1:1013987226718:web:1a9189577036bbedfd30cf",
+            measurementId: "G-DPFZN0LKVX"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const docRef = doc(db, "banco", "cuenta");
+
         let appData = {
             phone: "98765432",
             pass: "1234",
@@ -424,18 +440,39 @@
         let currentActionType = 'deposit';
         let showBalance = true;
 
-        function initApp() {
-            const saved = localStorage.getItem('banco_escolar_data');
-            if (saved) {
-                try { appData = JSON.parse(saved); } catch(e){}
+        // Sincronización en tiempo real con Firestore
+        onSnapshot(docRef, (docSnap) => {
+            if (docSnap.exists()) {
+                appData = docSnap.data();
+                if (!appData.adminCode) appData.adminCode = "1234";
+                if (!appData.phone) appData.phone = "98765432";
+                if (!appData.pass) appData.pass = "1234";
+            } else {
+                // Crear documento inicial si no existe
+                setDoc(docRef, appData);
             }
-            if(!appData.adminCode) appData.adminCode = "1234";
-            if(!appData.phone) appData.phone = "98765432";
-            if(!appData.pass) appData.pass = "1234";
-
-            // Prellenar campos de configuración con los valores actuales
-            document.getElementById('regPhone').value = appData.phone;
             
+            // Actualizar interfaz si hay sesión activa
+            if (currentSession) {
+                updateDashboardUI();
+                if (!document.getElementById('historyModal').classList.contains('hidden')) {
+                    openHistoryModal();
+                }
+            }
+            checkSession();
+        });
+
+        async function saveToCloud() {
+            try {
+                await setDoc(docRef, appData);
+            } catch (e) {
+                console.error("Error al guardar en la nube: ", e);
+                alert("Error de sincronización con la nube.");
+            }
+        }
+
+        function initApp() {
+            document.getElementById('regPhone').value = appData.phone;
             checkSession();
         }
 
@@ -487,13 +524,12 @@
             }
         }
 
-        function handleRegister(e) {
+        async function handleRegister(e) {
             e.preventDefault();
             const newPhone = document.getElementById('regPhone').value.trim();
             const oldPass = document.getElementById('regOldPass').value.trim();
             const newPass = document.getElementById('regPass').value.trim();
 
-            // Validar contraseña anterior obligatoria para poder cambiar
             if (oldPass !== appData.pass) {
                 alert('La contraseña anterior es incorrecta. No se pueden aplicar los cambios.');
                 return;
@@ -506,11 +542,11 @@
 
             appData.phone = newPhone;
             appData.pass = newPass;
-            saveToStorage();
+            await saveToCloud();
             
             document.getElementById('regOldPass').value = '';
             document.getElementById('regPass').value = '';
-            alert('¡Configuración de cuenta actualizada con éxito!');
+            alert('¡Configuración actualizada en la nube con éxito!');
             switchAuthTab('login');
         }
 
@@ -601,7 +637,7 @@
             document.getElementById('actionModal').classList.add('hidden');
         }
 
-        function handleTransaction(e) {
+        async function handleTransaction(e) {
             e.preventDefault();
             const amt = parseFloat(document.getElementById('amountInput').value);
             if(isNaN(amt) || amt <= 0) {
@@ -627,7 +663,7 @@
                 date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
             });
 
-            saveToStorage();
+            await saveToCloud();
             updateDashboardUI();
             closeActionModal();
         }
@@ -644,7 +680,7 @@
             document.getElementById('adminModal').classList.add('hidden');
         }
 
-        function saveSettings(e) {
+        async function saveSettings(e) {
             e.preventDefault();
             const enteredPin = document.getElementById('currentAdminCode').value.trim();
 
@@ -673,31 +709,45 @@
                 appData.adminCode = newCode;
             }
 
-            saveToStorage();
+            await saveToCloud();
             updateDashboardUI();
             closeAdminModal();
-            alert('¡Ajustes actualizados correctamente!');
+            alert('¡Ajustes actualizados en la nube correctamente!');
         }
 
-        function clearHistoryFromAdmin() {
+        async function clearHistoryFromAdmin() {
             const enteredPin = document.getElementById('currentAdminCode').value.trim();
             if (enteredPin !== appData.adminCode) {
                 alert('Se requiere el código maestro correcto para borrar el historial.');
                 return;
             }
 
-            if(confirm('¿Estás seguro de borrar todo el historial de transacciones?')) {
+            if(confirm('¿Estás seguro de borrar todo el historial de transacciones en la nube?')) {
                 appData.history = [];
-                saveToStorage();
+                await saveToCloud();
                 alert('Historial borrado correctamente.');
                 closeAdminModal();
             }
         }
 
-        function saveToStorage() {
-            localStorage.setItem('banco_escolar_data', JSON.stringify(appData));
-        }
+        // Exponer funciones globales para los botones onclick del HTML
+        window.switchAuthTab = switchAuthTab;
+        window.handleLogin = handleLogin;
+        window.handleRegister = handleRegister;
+        window.logout = logout;
+        window.toggleBalanceVisibility = toggleBalanceVisibility;
+        window.switchNavTab = switchNavTab;
+        window.openHistoryModal = openHistoryModal;
+        window.closeHistoryModal = closeHistoryModal;
+        window.openActionModal = openActionModal;
+        window.closeActionModal = closeActionModal;
+        window.handleTransaction = handleTransaction;
+        window.openAdminModal = openAdminModal;
+        window.closeAdminModal = closeAdminModal;
+        window.saveSettings = saveSettings;
+        window.clearHistoryFromAdmin = clearHistoryFromAdmin;
 
+        // Inicializar al cargar
         window.onload = initApp;
     </script>
 </body>
