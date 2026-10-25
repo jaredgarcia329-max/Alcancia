@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Alcancía Digital NFC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .card-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1d4ed8 100%);
+        }
+        .chip-pattern {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 font-sans pb-10">
+
+    <!-- Encabezado -->
+    <header class="bg-slate-900 text-white p-4 shadow-lg sticky top-0 z-50">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-piggy-bank text-amber-400 text-2xl"></i>
+                <h1 class="font-bold text-lg tracking-wide">Banco Escolar NFC</h1>
+            </div>
+            <button onclick="toggleModal('configModal')" class="text-slate-300 hover:text-white p-2">
+                <i class="fa-solid fa-gear text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto px-4 mt-6 space-y-6">
+
+        <!-- Tarjeta Digital -->
+        <div class="card-gradient rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <p class="text-xs text-blue-200 tracking-wider uppercase">Alcancía Digital</p>
+                    <h2 id="cardHolder" class="font-bold text-xl tracking-wide uppercase mt-1">Cargando...</h2>
+                </div>
+                <i class="fa-solid fa-wifi text-2xl opacity-80 rotate-90"></i>
+            </div>
+            
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-11 h-8 chip-pattern rounded-md flex items-center justify-center shadow-inner">
+                    <div class="w-7 h-5 border border-amber-300/40 rounded-sm"></div>
+                </div>
+                <p id="cardNumber" class="font-mono text-sm tracking-widest text-blue-100">•••• •••• •••• ••••</p>
+            </div>
+
+            <div class="flex justify-between items-end">
+                <div>
+                    <p class="text-xs text-blue-200 uppercase">Saldo Disponible</p>
+                    <p class="text-3xl font-extrabold tracking-tight mt-0.5">$<span id="totalBalance">0.00</span></p>
+                </div>
+                <span class="bg-blue-500/30 backdrop-blur-sm border border-blue-300/30 text-xs px-2.5 py-1 rounded-full flex items-center gap-1">
+                    <i class="fa-solid fa-bolt text-amber-300"></i> NFC Activo
+                </span>
+            </div>
+        </div>
+
+        <!-- Meta de Ahorro -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80">
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-bullseye text-indigo-600"></i>
+                    <h3 id="goalTitle" class="font-bold text-slate-700">Mi Meta de Ahorro</h3>
+                </div>
+                <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">$<span id="goalTarget">0.00</span></span>
+            </div>
+            
+            <div class="w-full bg-slate-100 rounded-full h-3.5 mb-2 overflow-hidden border border-slate-200">
+                <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-blue-600 h-3.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            
+            <div class="flex justify-between text-xs text-slate-500 font-medium">
+                <span>Completado: <strong id="progressPercent">0%</strong></span>
+                <span id="progressStatus">¡Empieza a ahorrar!</span>
+            </div>
+        </div>
+
+        <!-- Botones de Operación -->
+        <div class="grid grid-cols-2 gap-4">
+            <button onclick="openTransactionModal('deposit')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold p-4 rounded-2xl shadow-lg shadow-emerald-600/20 flex flex-col items-center justify-center space-y-1 transition-all active:scale-95">
+                <i class="fa-solid fa-circle-arrow-down text-2xl"></i>
+                <span>Depositar</span>
+            </button>
+
+            <button onclick="openTransactionModal('withdraw')" class="bg-rose-600 hover:bg-rose-700 text-white font-bold p-4 rounded-2xl shadow-lg shadow-rose-600/20 flex flex-col items-center justify-center space-y-1 transition-all active:scale-95">
+                <i class="fa-solid fa-circle-arrow-up text-2xl"></i>
+                <span>Retirar</span>
+            </button>
+        </div>
+
+        <!-- Historial de Movimientos -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-slate-700 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-slate-400"></i>
+                    Historial
+                </h3>
+                <button onclick="clearHistoryOnly()" class="text-xs text-slate-400 hover:text-rose-500">Limpiar Lista</button>
+            </div>
+            
+            <div id="historyList" class="space-y-3 max-h-60 overflow-y-auto pr-1">
+                <!-- Se llena dinámicamente -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal de Transacción -->
+    <div id="transactionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl space-y-4">
+            <h3 id="modalTitle" class="font-bold text-lg text-slate-800">Nueva Operación</h3>
+            
+            <form id="transactionForm" onsubmit="handleTransaction(event)" class="space-y-4">
+                <input type="hidden" id="transType">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Monto ($)</label>
+                    <input type="number" id="transAmount" step="0.01" min="0.01" required placeholder="0.00" class="w-full border border-slate-300 rounded-xl p-3 text-lg font-bold text-slate-800 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Motivo / Descripción</label>
+                    <input type="text" id="transConcept" required placeholder="Ej. Domingo, Mandado, Premio" class="w-full border border-slate-300 rounded-xl p-3 text-sm text-slate-800 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div class="flex space-x-3 pt-2">
+                    <button type="button" onclick="toggleModal('transactionModal')" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl text-sm">Cancelar</button>
+                    <button type="submit" id="submitBtn" class="w-1/2 text-white font-bold py-3 rounded-xl text-sm shadow-md">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Configuración -->
+    <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl space-y-4">
+            <h3 class="font-bold text-lg text-slate-800">Configuración de Cuenta</h3>
+            
+            <form onsubmit="saveSettings(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Nombre del Titular</label>
+                    <input type="text" id="cfgName" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Número de Tarjeta</label>
+                    <input type="text" id="cfgCard" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm font-mono">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Meta de Ahorro ($)</label>
+                    <input type="number" id="cfgGoal" step="0.01" min="1" required class="w-full border border-slate-300 rounded-xl p-2.5 text-sm font-bold">
+                </div>
+
+                <div class="flex space-x-3 pt-2">
+                    <button type="button" onclick="toggleModal('configModal')" class="w-1/2 bg-slate-100 text-slate-600 font-bold py-2.5 rounded-xl text-sm">Cancelar</button>
+                    <button type="submit" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-sm">Guardar</button>
+                </div>
+            </form>
+
+            <hr class="border-slate-200 my-2">
+
+            <button onclick="fullReset()" class="w-full text-rose-500 hover:bg-rose-50 font-semibold py-2 rounded-xl text-xs flex items-center justify-center gap-1">
+                <i class="fa-solid fa-trash-can"></i> Restablecer Todo de Fábrica
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Configuración Predeterminada
+        const DEFAULT_DATA = {
+            name: "Josué",
+            cardNumber: "4000 1234 5678 9010",
+            balance: 0.00,
+            goal: 500.00,
+            history: []
+        };
+
+        let appData = {};
+
+        // Cargar Datos de localStorage al Iniciar
+        function initApp() {
+            const saved = localStorage.getItem('bankData');
+            if (saved) {
+                appData = JSON.parse(saved);
+            } else {
+                appData = { ...DEFAULT_DATA };
+                saveToStorage();
+            }
+            renderUI();
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('bankData', JSON.stringify(appData));
+        }
+
+        function renderUI() {
+            document.getElementById('cardHolder').innerText = appData.name;
+            document.getElementById('cardNumber').innerText = appData.cardNumber;
+            document.getElementById('totalBalance').innerText = appData.balance.toFixed(2);
+            document.getElementById('goalTarget').innerText = appData.goal.toFixed(2);
+
+            // Campos del modal de configuración
+            document.getElementById('cfgName').value = appData.name;
+            document.getElementById('cfgCard').value = appData.cardNumber;
+            document.getElementById('cfgGoal').value = appData.goal;
+
+            // Barra de progreso
+            const percent = Math.min(100, Math.max(0, (appData.balance / appData.goal) * 100));
+            document.getElementById('progressBar').style.width = `${percent}%`;
+            document.getElementById('progressPercent').innerText = `${percent.toFixed(0)}%`;
+
+            const statusText = document.getElementById('progressStatus');
+            if(percent >= 100) statusText.innerText = "¡Meta alcanzada! 🎉";
+            else if(percent >= 50) statusText.innerText = "¡Vas a la mitad!";
+            else statusText.innerText = "¡Sigue acumulando!";
+
+            // Historial
+            const historyContainer = document.getElementById('historyList');
+            if (appData.history.length === 0) {
+                historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No hay movimientos registrados.</p>`;
+            } else {
+                historyContainer.innerHTML = appData.history.map(item => `
+                    <div class="flex justify-between items-center p-3 rounded-xl bg-slate-50 border border-slate-100">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center ${item.type === 'deposit' ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}">
+                                <i class="fa-solid ${item.type === 'deposit' ? 'fa-arrow-down' : 'fa-arrow-up'} text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-700">${item.concept}</p>
+                                <p class="text-[10px] text-slate-400">${item.date}</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-extrabold ${item.type === 'deposit' ? 'text-emerald-600' : 'text-rose-600'}">
+                            ${item.type === 'deposit' ? '+' : '-'}$${item.amount.toFixed(2)}
+                        </span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function openTransactionModal(type) {
+            document.getElementById('transType').value = type;
+            document.getElementById('transAmount').value = '';
+            document.getElementById('transConcept').value = '';
+            
+            const submitBtn = document.getElementById('submitBtn');
+            if (type === 'deposit') {
+                document.getElementById('modalTitle').innerText = "Registrar Depósito";
+                submitBtn.className = "w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-sm shadow-md";
+            } else {
+                document.getElementById('modalTitle').innerText = "Registrar Retiro";
+                submitBtn.className = "w-1/2 bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl text-sm shadow-md";
+            }
+            toggleModal('transactionModal');
+        }
+
+        function handleTransaction(e) {
+            e.preventDefault();
+            const type = document.getElementById('transType').value;
+            const amount = parseFloat(document.getElementById('transAmount').value);
+            const concept = document.getElementById('transConcept').value;
+
+            if (type === 'withdraw' && amount > appData.balance) {
+                alert("¡Saldo insuficiente en la alcancía!");
+                return;
+            }
+
+            if (type === 'deposit') appData.balance += amount;
+            else appData.balance -= amount;
+
+            const now = new Date();
+            const dateStr = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            appData.history.unshift({ type, amount, concept, date: dateStr });
+
+            saveToStorage();
+            renderUI();
+            toggleModal('transactionModal');
+        }
+
+        function saveSettings(e) {
+            e.preventDefault();
+            appData.name = document.getElementById('cfgName').value;
+            appData.cardNumber = document.getElementById('cfgCard').value;
+            appData.goal = parseFloat(document.getElementById('cfgGoal').value);
+
+            saveToStorage();
+            renderUI();
+            toggleModal('configModal');
+        }
+
+        function clearHistoryOnly() {
+            if (confirm("¿Borrar solo la lista visual del historial? El saldo acumulado NO se perderá.")) {
+                appData.history = [];
+                saveToStorage();
+                renderUI();
+            }
+        }
+
+        function fullReset() {
+            if (confirm("¿Seguro que deseas reiniciar todo de fábrica? Esto pondrá el saldo en $0.00.")) {
+                localStorage.removeItem('bankData');
+                initApp();
+                toggleModal('configModal');
+            }
+        }
+
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
