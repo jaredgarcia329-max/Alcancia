@@ -150,14 +150,14 @@
                                 <label class="block text-xs font-medium text-gray-300 mb-1.5">Número de Teléfono</label>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400"><i class="fa-solid fa-phone"></i></span>
-                                    <input type="tel" id="loginPhone" required placeholder="Ej: 98765432" class="w-full bg-[#071319] border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-teal-500 transition-colors">
+                                    <input type="tel" id="loginPhone" required placeholder="94945253" class="w-full bg-[#071319] border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-teal-500 transition-colors">
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-gray-300 mb-1.5">Contraseña de Acceso</label>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400"><i class="fa-solid fa-lock"></i></span>
-                                    <input type="password" id="loginPass" required placeholder="••••••••" class="w-full bg-[#071319] border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-teal-500 transition-colors">
+                                    <input type="password" id="loginPass" required placeholder="1208" class="w-full bg-[#071319] border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-teal-500 transition-colors">
                                 </div>
                             </div>
                             <button type="submit" class="w-full bg-gradient-to-r from-teal-600 to-emerald-500 text-white font-semibold py-3 rounded-xl shadow-lg hover:from-teal-500 hover:to-emerald-400 transition-all mt-2 text-sm">
@@ -427,12 +427,12 @@
         const docRef = doc(db, "banco", "cuenta");
 
         let appData = {
-            phone: "98765432",
-            pass: "1234",
+            phone: "94945253",
+            pass: "1208",
             balance: 0.00,
             goalTitle: "Mi Meta de Ahorro",
             goalTarget: 500.00,
-            adminCode: "1234",
+            adminCode: "1208",
             history: []
         };
 
@@ -444,9 +444,9 @@
         onSnapshot(docRef, (docSnap) => {
             if (docSnap.exists()) {
                 appData = docSnap.data();
-                if (!appData.adminCode) appData.adminCode = "1234";
-                if (!appData.phone) appData.phone = "98765432";
-                if (!appData.pass) appData.pass = "1234";
+                if (!appData.adminCode) appData.adminCode = "1208";
+                if (!appData.phone) appData.phone = "94945253";
+                if (!appData.pass) appData.pass = "1208";
             } else {
                 setDoc(docRef, appData);
             }
