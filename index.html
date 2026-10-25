@@ -204,7 +204,7 @@
                     <div class="flex justify-between items-center mb-4">
                         <div>
                             <p class="text-xs text-gray-400">Bienvenido de nuevo,</p>
-                            <h2 id="userNameDisplay" class="text-lg font-bold text-white"></h2>
+                            <h2 id="userNameDisplay" class="text-lg font-bold text-white">Alan Josué</h2>
                         </div>
                         <button onclick="logout()" class="w-9 h-9 rounded-xl bg-gray-800 text-gray-300 flex items-center justify-center hover:bg-gray-700 transition-colors" title="Cerrar sesión">
                             <i class="fa-solid fa-right-from-bracket"></i>
@@ -243,7 +243,7 @@
                         <div class="flex justify-between items-end">
                             <div>
                                 <p class="text-[9px] uppercase tracking-wider text-teal-200/60">Titular</p>
-                                <p id="cardHolderName" class="text-xs font-bold uppercase tracking-wider text-white">JOSUÉ</p>
+                                <p id="cardHolderName" class="text-xs font-bold uppercase tracking-wider text-white">ALAN JOSUÉ</p>
                             </div>
                             <div>
                                 <p class="text-[9px] uppercase tracking-wider text-teal-200/60">Vence</p>
@@ -448,11 +448,9 @@
                 if (!appData.phone) appData.phone = "98765432";
                 if (!appData.pass) appData.pass = "1234";
             } else {
-                // Crear documento inicial si no existe
                 setDoc(docRef, appData);
             }
             
-            // Actualizar interfaz si hay sesión activa
             if (currentSession) {
                 updateDashboardUI();
                 if (!document.getElementById('historyModal').classList.contains('hidden')) {
@@ -482,7 +480,7 @@
                 currentSession = session;
                 document.getElementById('authView').classList.add('hidden');
                 document.getElementById('dashboardView').classList.remove('hidden');
-                document.getElementById('userNameDisplay').textContent = "Hermano de Josué (" + appData.phone + ")";
+                document.getElementById('userNameDisplay').textContent = "Alan Josué";
                 updateDashboardUI();
             } else {
                 document.getElementById('dashboardView').classList.add('hidden');
@@ -666,6 +664,12 @@
             await saveToCloud();
             updateDashboardUI();
             closeActionModal();
+
+            if (currentActionType === 'deposit') {
+                alert('¡Depósito realizado con éxito!');
+            } else {
+                alert('¡Retiro realizado con éxito!');
+            }
         }
 
         function openAdminModal() {
@@ -725,12 +729,12 @@
             if(confirm('¿Estás seguro de borrar todo el historial de transacciones en la nube?')) {
                 appData.history = [];
                 await saveToCloud();
-                alert('Historial borrado correctamente.');
                 closeAdminModal();
+                alert('¡Historial borrado con éxito!');
             }
         }
 
-        // Exponer funciones globales para los botones onclick del HTML
+        // Exponer funciones globales
         window.switchAuthTab = switchAuthTab;
         window.handleLogin = handleLogin;
         window.handleRegister = handleRegister;
@@ -747,7 +751,6 @@
         window.saveSettings = saveSettings;
         window.clearHistoryFromAdmin = clearHistoryFromAdmin;
 
-        // Inicializar al cargar
         window.onload = initApp;
     </script>
 </body>
